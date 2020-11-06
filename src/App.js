@@ -2,41 +2,31 @@
 import './App.css';
 import { useEffect, useState } from 'react';
 
+import moment from 'moment';
+
 const calculateTime = () => {
-	let time = new Date();
-	let now = `${`0${time.getDate()}`.slice(-2)}.${`0${time.getMonth() + 1}`.slice(
-		-2
-	)}.${time.getFullYear()} ${`0${time.getHours()}`.slice(-2)}:${`0${time.getMinutes()}`.slice(
-		-2
-	)}:${`0${time.getSeconds()}`.slice(-2)}`;
+	let formatStringFullDate = 'DD.MM.YYYY HH:mm:ss';
+	let formatStringHours = 'HH:mm:ss';
+	let momentNow = moment();
+	let momentEnd = moment().set('hour', 14).set('minute', 30).set('second', 0);
 
-	let endReturn = `${`0${time.getDate()}`.slice(-2)}.${`0${time.getMonth() + 1}`.slice(
-		-2
-	)}.${time.getFullYear()} 14:30:00`;
+	let diff = momentEnd.diff(momentNow);
 
-	let endDateString = `${time.getFullYear()}-${`0${time.getMonth() + 1}`.slice(
-		-2
-	)}-${`0${time.getDate()}`.slice(-2)}T14:30:00+02:00`;
+	let momentDiff = moment(diff).utcOffset(0).subtract({ days: 1 });
 
-	console.log(endDateString);
+	let mNow = momentNow.format(formatStringFullDate);
+	let mEnd = momentEnd.format(formatStringFullDate);
+	let mDiff = momentDiff.format(formatStringHours);
 
-	let endDate = new Date(endDateString);
-
-	let diff = endDate.valueOf() - time.valueOf();
-
-	let diffD = new Date(diff);
-
-	let diffstr = `${`0${diffD.getHours()}`.slice(-2)}:${`0${diffD.getMinutes()}`.slice(
-		-2
-	)}:${`0${diffD.getSeconds()}`.slice(-2)}`;
-
-	return { diff: diffstr, end: endReturn, now };
+	return { diff: mDiff, end: mEnd, now: mNow };
 };
 
 function App() {
 	const [remainingTime, setRemainingTime] = useState('--:--:--');
 	const [now, setNow] = useState('--.--.---- --:--:--');
 	const [end, setEnd] = useState('--.--.---- --:--:--');
+
+	calculateTime();
 
 	useEffect(() => {
 		let i = setInterval(() => {
