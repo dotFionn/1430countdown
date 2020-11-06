@@ -16,13 +16,11 @@ const calculateTime = () => {
 
 	let endDateString = `${time.getFullYear()}-${`0${time.getMonth() + 1}`.slice(
 		-2
-	)}-${`0${time.getDate()}`.slice(-2)}T14:30:00`;
+	)}-${`0${time.getDate()}`.slice(-2)}T14:30:00+02:00`;
 
 	console.log(endDateString);
 
-	let endDate = Date.parse(endDateString);
-
-	console.log(endDate);
+	let endDate = new Date(endDateString);
 
 	let diff = endDate.valueOf() - time.valueOf();
 
@@ -37,8 +35,8 @@ const calculateTime = () => {
 
 function App() {
 	const [remainingTime, setRemainingTime] = useState('--:--:--');
-	const [now, setNow] = useState('--:--:--');
-	const [end, setEnd] = useState('--:--:--');
+	const [now, setNow] = useState('--.--.---- --:--:--');
+	const [end, setEnd] = useState('--.--.---- --:--:--');
 
 	useEffect(() => {
 		let i = setInterval(() => {
